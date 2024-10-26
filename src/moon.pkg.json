@@ -1,6 +1,6 @@
 {
   "import": [
-    "dxsoft/linklist/linklist"
+    "suiyunonghen/linklist/linklist"
   ],
   "is-main": true
 }
