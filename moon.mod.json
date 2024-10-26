@@ -5,6 +5,6 @@
   "repository": "https://github.com/suiyunonghen/linklist",
   "license": "Apache-2.0",
   "keywords": ["Double Linked List","双链表"],
-  "description": "",
+  "description": "Double Linked List 双链表",
   "source": "src"
 }
