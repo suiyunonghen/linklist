@@ -58,6 +58,34 @@ pub fn push[T](self: LinkList[T],value: T)->LinkList[T]{
   self
 }
 
+pub fn add[T](self: LinkList[T],value: T)->LinkList[T]{
+  self.push(value)  
+}
+
+pub impl[T : Show] Show for LinkList[T] with output(xs, logger) {
+  logger.write_iter(xs.iter(), prefix="", suffix="",sep="<=>")
+}
+
+pub fn LinkList::to_string[T : Show](xs : LinkList[T]) -> String {
+  Show::to_string(xs)
+}
+
+/// Convert array to LinkList.
+///
+/// # Example
+///
+/// ```
+/// let ls = @LinkList::from_array([1, 2, 3, 4, 5])
+/// println(ls) // output: 1<=>2<=>3<=>4<=>5
+/// ```
+pub fn LinkList::from_array[T](arr : Array[T]) -> LinkList[T] {
+  for i = 0, list = LinkList::default(); i < arr.length(); {    
+    continue i + 1, list.push(arr[i])
+  } else {
+    list
+  }
+}
+
 ///Pop up data from the end of the linked list.
 ///
 /// # Example
@@ -157,6 +185,7 @@ pub fn unshift[T](self: LinkList[T],value: T)->LinkList[T]{
   self
 }
 
+/// for ele in LinkList
 pub fn iter[T](self : LinkList[T]) -> Iter[T] {
   Iter::new(
     fn(yield){
@@ -231,18 +260,35 @@ pub fn map[A,B](self: LinkList[A],f: (A)->B)->LinkList[B]{
   result
 }
 
+/// Reverse maps the list.
+///
+/// # Example
+///
+/// ```
+/// let list: @linklist.LinkList[Int] = @linklist.LinkList::new().push(1).push(2).push(3).push(4)
+/// let lst = list.reverse_map(fn(v)->Int{v*2})
+/// // lst=8<=>6<=>4<=>2
+/// ```
 pub fn reverse_map[A,B](self: LinkList[A],f: (A)->B)->LinkList[B]{
   let result: LinkList[B] = LinkList::new()
   loop self.tail{
     Some(current)=>{
       let _=result.push(f(current.value))
-      continue current.next
+      continue current.prev
     }
     _=>break
   }
   result
 }
 
+/// Filter the list.
+///
+/// # Example
+///
+/// ```
+/// println(of([1, 2, 3, 4, 5]).filter(fn(x){ x % 2 == 0}))
+/// // output: from_array([2, 4])
+/// ```
 pub fn filter[T](self: LinkList[T],f:(T)->Bool)->LinkList[T]{
   let result: LinkList[T] = LinkList::new()
   loop self.head{
@@ -257,6 +303,15 @@ pub fn filter[T](self: LinkList[T],f:(T)->Bool)->LinkList[T]{
   result
 }
 
+/// Zip two LinkList.
+/// If the lists have different lengths, it will return None.
+///
+/// # Example
+///
+/// ```
+/// let r = zip(of[1, 2, 3, 4, 5]), of([6, 7, 8, 9, 10]))
+/// println(r) // output: Some((1, 6)<=>(2, 7)<=>(3, 8)<=>(4, 9)<=>(5, 10))
+/// ```
 pub fn zip[A,B](self: LinkList[A],other: LinkList[B])->LinkList[(A,B)]?{
   if self.length != other.length{
     None
@@ -273,6 +328,15 @@ pub fn zip[A,B](self: LinkList[A],other: LinkList[B])->LinkList[(A,B)]?{
   }
 }
 
+/// Unzip two linkLists.
+///
+/// # Example
+///
+/// ```
+/// let (a,b) = unzip(from_array([(1,2),(3,4),(5,6)]))
+/// println(a) // output: from_array([1, 3, 5])
+/// println(b) // output: from_array([2, 4, 6])
+/// ```
 pub fn unzip[A,B](self: LinkList[(A,B)])->(LinkList[A],LinkList[B]){
   let (resulta,resultb)=(LinkList::new(),LinkList::new())
   loop self.head{
@@ -286,6 +350,7 @@ pub fn unzip[A,B](self: LinkList[(A,B)])->(LinkList[A],LinkList[B]){
   (resulta,resultb)
 }
 
+/// Check if the linkList contains the value.
 pub fn contains[T: Eq](self: LinkList[T],value: T)->Bool{
   loop self.head{
     Some(current)=>{
@@ -298,6 +363,7 @@ pub fn contains[T: Eq](self: LinkList[T],value: T)->Bool{
   }
 }
 
+/// remove value from linkList
 pub fn remove[T:Eq](self: LinkList[T],value: T)->Bool{
   loop self.head{
     Some(current)=>{      
@@ -334,6 +400,13 @@ pub fn remove[T:Eq](self: LinkList[T],value: T)->Bool{
   }
 }
 
+/// Drop the longest prefix of a LinkList of elements that satisfies a given predicate.
+///
+/// # Example
+///
+/// ```
+/// from_array([1, 2, 3, 4]).drop_while(fn(x) { x < 3 })
+/// ```
 pub fn drop_while[T](self: LinkList[T],f:(T)->Bool)->LinkList[T]{
   loop self.head{
     Some(current)=>{
@@ -369,6 +442,14 @@ pub fn drop_while[T](self: LinkList[T],f:(T)->Bool)->LinkList[T]{
   }
 }
 
+/// Looks up a key in an association LinkList.
+///
+/// # Example
+///
+/// ```
+/// let ls = from_array([(1, "a"), (2, "b"), (3, "c")])
+/// ls.lookup(3) // output: Some("c")
+/// ```
 pub fn lookup[A: Eq,B](self: LinkList[(A,B)],value: A)->B?{
   loop self.head{
     Some(current)=>{
@@ -381,6 +462,14 @@ pub fn lookup[A: Eq,B](self: LinkList[(A,B)],value: A)->B?{
   }
 }
 
+/// Find the first element in the LinkList that satisfies f.
+///
+/// # Example
+///
+/// ```
+/// println(of([1, 3, 5, 8]).find(fn(element) -> Bool { element % 2 == 0}))
+/// // output: Some(8)
+/// ```
 pub fn find[T](self: LinkList[T],f: (T)->Bool)->T?{
   loop self.head{
     Some(current)=>{
@@ -403,4 +492,12 @@ pub fn LinkList::default[T]()->LinkList[T]{
 
 pub fn LinkList::from_iter[T](iter: Iter[T])->LinkList[T]{
   iter.fold(init=LinkList::default(),fn(list,e){list.push(e)})
+}
+
+pub fn LinkList::of[T](arr: FixedArray[T])->LinkList[T]{
+  let result: LinkList[T] = LinkList::new()
+  for ele in arr{
+    let _ = result.push(ele)
+  }
+  result
 }

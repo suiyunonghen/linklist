@@ -1,10 +1,12 @@
 test "push pop" {  
   let list: @linklist.LinkList[Int] = @linklist.LinkList::new().push(123).push(456).push(789)  
+  println(list)
   assert_eq!(list.pop(),Some(789))
   assert_eq!(list.pop(),Some(456))
   assert_eq!(list.pop(),Some(123))
   assert_eq!(list.pop(),None)
   assert_eq!(list.length,0)
+  println(list)  
 }
 
 test "shift unshift"{
@@ -34,6 +36,13 @@ test "iter"{
   }
 }
 
+test "Zip"{
+  let r = @linklist.zip(@linklist.LinkList::of([1, 2, 3, 4, 5]), @linklist.LinkList::of([6, 7, 8, 9, 10]))
+  println(r)
+  let v =r.unwrap().unzip()
+  println(v)
+}
+
 test "remove"{
   let list: @linklist.LinkList[String] = @linklist.LinkList::new()
   let _=list.push("test").push("dxsoft").push("data")
@@ -45,19 +54,23 @@ test "remove"{
 }
 
 test "drop_while"{
-  let list: @linklist.LinkList[Int] = @linklist.LinkList::new()
-  let _=list.push(1).push(2).push(3).push(4).push(5).push(6).push(7).push(8).push(9)
+  let list: @linklist.LinkList[Int] = @linklist.LinkList::new().push(1).push(2).push(3).push(4).push(5).push(6).push(7).push(8).push(9)  
   let _ =list.drop_while(fn(value)->Bool{
     value % 2 == 0
   })
-  for str in list{
-    println(str)
-  }
+  println(list)  
 }
 
 test "map"{
   let list: @linklist.LinkList[Int] = @linklist.LinkList::new().push(1).push(2).push(3).push(4)
-  let lst = list.map(fn(v)->Int{v*2})
+  let lst = list.reverse_map(fn(v)->Int{v*2})
+  for ele in lst{
+    println(ele)
+  }
+}
+
+test "of"{
+  let lst = @linklist.LinkList::from_array([1,23,45])
   for ele in lst{
     println(ele)
   }
