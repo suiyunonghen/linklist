@@ -1,0 +1,6 @@
+{
+  "import": [
+    "dxsoft/linklist/linklist"
+  ],
+  "is-main": true
+}

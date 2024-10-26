@@ -1,2 +1,1 @@
-# linklist
-moonbitlang 双向链表实现
+# moonbit的一个双向链表库
