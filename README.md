@@ -21,4 +21,11 @@ let m = list.reverse_iter()
 for str in m{
   println(str)    
 }
+
+let list = @linklist.LinkList::of([1,2,3,4,5,6,7,8,9])
+let _ =list.drop_while(fn(value)->Bool{
+  value % 2 == 0
+})
+println(list)
+println(list[3])
 ```

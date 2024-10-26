@@ -54,7 +54,7 @@ test "remove"{
 }
 
 test "drop_while"{
-  let list: @linklist.LinkList[Int] = @linklist.LinkList::new().push(1).push(2).push(3).push(4).push(5).push(6).push(7).push(8).push(9)  
+  let list = @linklist.LinkList::of([1,2,3,4,5,6,7,8,9])
   let _ =list.drop_while(fn(value)->Bool{
     value % 2 == 0
   })
@@ -73,5 +73,12 @@ test "of"{
   let lst = @linklist.LinkList::from_array([1,23,45])
   for ele in lst{
     println(ele)
+  }
+}
+
+test "[]"{
+  let lst = @linklist.of(["春眠不觉晓","处处闻啼鸟","一生如牛不得闲","得闲已与山共眠"])
+  for i=0;i<lst.length;i=i+1{
+    println(lst[i])
   }
 }

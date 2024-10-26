@@ -32,6 +32,18 @@ pub fn LinkList::new[T]()->LinkList[T]{
   }
 }
 
+pub fn op_get[T](self: LinkList[T],index: Int)->T?{
+  loop self.head,0{
+    Some(current),idx=>{
+      if idx == index{
+        break Some(current.value)
+      }
+      continue current.next,idx+1
+    }
+    _,_=>break None
+  }
+}
+
 ///Add data to the end of the linked list.
 ///
 /// # Example
@@ -203,10 +215,14 @@ pub fn iter[T](self : LinkList[T]) -> Iter[T] {
 }
 
 /// reverse iterator
+/// # Example
+///
+/// ```
 /// let list: @linklist.LinkList[String] = @linklist.LinkList::new().push("反向").push("迭代器")
 /// let m = list.reverse_iter()
 /// for str in m{
 ///   println(str) 
+/// ```
 /// }
 pub fn reverse_iter[T](self: LinkList[T])->Iter[T]{
   Iter::new(
