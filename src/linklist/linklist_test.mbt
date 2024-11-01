@@ -82,3 +82,36 @@ test "[]"{
     println(lst[i])
   }
 }
+
+test "findNode"{
+  let list = @linklist.LinkList::of([1,2,3,4,5,6,7,8,9])
+  let node5 = list.findNode(fn(value:Int)->Bool{
+    value==5
+  })
+  match node5{
+    Some(v)=>{
+      println("查到了内容\{v},下面准备从这里开始往后迭代")
+      for value in v{
+        println(value)
+      }
+      println("准备反向迭代")
+      for value in v.reverse_iter(){
+        println(value)
+      }
+    }
+    None=>println("悟了")
+  }
+}
+
+test "sendToBack"{
+  let list = @linklist.LinkList::of([1,2,3,4,5,6,7,8,9])
+  println(list)
+  list.sendtoback(8,findFromEnd=true)
+  println(list)
+}
+
+test "bringtofront"{
+  let list = @linklist.LinkList::of([1,2,3,4,5,6,7,8,9])
+  list.bringtofront(4,findFromHead=false)
+  println(list)
+}

@@ -12,10 +12,114 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-priv struct Node[T]{
+struct Node[T]{
   mut prev: Option[Node[T]]
   mut next: Option[Node[T]]
   value: T  
+}
+
+pub fn value[T](self: Node[T])->T{
+  self.value
+}
+
+pub fn to_string[T: Show](self: Node[T])->String{
+  self.value.to_string()
+}
+
+pub fn Node::findNode[T: Eq](self: Node[T],value: T)->Node[T]?{
+  if self.value == value{
+    return Some(self)
+  }
+  loop self.next{
+    Some(current)=>{
+      if current.value == value{
+        break Some(current)
+      }
+      continue current.next
+    }
+    _=>None
+  }
+}
+
+pub fn Node::findNodeEx[T](self: Node[T],f: (T)->Bool)->Node[T]?{
+  if f(self.value){
+    return Some(self)
+  }
+  loop self.next{
+    Some(current)=>{
+      if f(current.value){
+        break Some(current)
+      }
+      continue current.next
+    }
+    _=>None
+  }
+}
+
+pub fn Node::rfindNode[T:Eq](self: Node[T],value: T)->Node[T]?{
+  if self.value == value{
+    return Some(self)
+  }
+  loop self.prev{
+    Some(prv)=>{
+      if prv.value == value{
+        break Some(prv)
+      }
+      continue prv.prev
+    }
+    _=>None
+  }
+}
+
+pub fn Node::rfindNodeEx[T](self: Node[T],f: (T)->Bool)->Node[T]?{
+  if f(self.value){
+    return Some(self)
+  }
+  loop self.prev{
+    Some(prv)=>{
+      if f(prv.value){
+        break Some(prv)
+      }
+      continue prv.prev
+    }
+    _=>None
+  }
+}
+
+pub fn iter[T](self : Node[T]) -> Iter[T] {
+  Iter::new(
+    fn(yield){ 
+      let _ = yield(self.value)
+      loop self.next{
+        Some(current)=>{
+          match yield(current.value){
+            IterContinue=>continue current.next
+            IterEnd=>break IterEnd
+          }          
+        }
+        None=>{
+          break IterEnd
+        }
+      }
+    }
+  )
+}
+
+pub fn reverse_iter[T](self: Node[T])->Iter[T]{
+  Iter::new(
+    fn(yield){
+      let _ = yield(self.value)
+      loop self.prev{
+        Some(current)=>{
+          match yield(current.value){
+            IterContinue=>continue current.prev
+            IterEnd=>break IterEnd
+          }          
+        }
+        None=>break IterEnd
+      }
+    }
+  )
 }
 
 pub (readonly) struct LinkList[T]{
@@ -496,6 +600,124 @@ pub fn find[T](self: LinkList[T],f: (T)->Bool)->T?{
     }
     _=>None
   }
+}
+/// Find the first elementNode in the LinkList that satisfies f.
+///
+/// # Example
+///
+/// ```
+/// let node5 = list.findNode(fn(value:Int)->Bool{
+///     value==5
+///   })
+///   match node5{
+///    Some(v)=>{
+///      println("查到了内容\{v},下面准备从这里开始往后迭代")
+///      for value in v{
+///        println(value)
+///      }
+///      println("准备反向迭代")
+///      for value in v.reverse_iter(){
+///        println(value)
+///      }
+///    }
+///    None=>println("悟了")
+///  }
+/// // output: Some(8)
+/// ```
+pub fn findNode[T](self: LinkList[T],f: (T)->Bool)->Node[T]?{
+  match self.head{
+    Some(head)=>head.findNodeEx(f)
+    _=>None
+  }  
+}
+
+/// Move the first element found to the end of the linked list
+/// 
+/// # Example
+///
+/// ```
+/// let list = @linklist.LinkList::of([1,2,3,4,5,6,7,8,9])
+/// list.sendtoback(8,findFromEnd=true)
+/// // 1<=>2<=>3<=>4<=>5<=>6<=>7<=>9<=>8
+/// ```
+pub fn sendtoback[T: Eq](self: LinkList[T],value: T,~findFromEnd: Bool=true)->Unit{
+  match self.tail{
+    Some(tail)=>{
+      if tail.value == value{
+        return
+      }
+      let findNode = {
+        if findFromEnd{
+          tail.rfindNode(value)
+        }else{
+          self.head.unwrap().findNode(value)
+        }
+      }      
+      match findNode{        
+        Some(node)=>{
+          let next = node.next
+          next.unwrap().prev = node.prev 
+          match node.prev{
+            Some(prvNode)=>prvNode.next = next
+            None=>self.head = next
+          }
+          self.tail.unwrap().next = Some(node)
+          node.prev = self.tail          
+          node.next = None
+          self.tail = Some(node)
+          return
+        }
+        None=>()
+      }
+      
+    }
+    _=> ()
+  }
+  let _= self.push(value)
+}
+
+/// Move the first element found to the beginning of the linked list
+/// 
+/// # Example
+///
+/// ```
+/// let list = @linklist.LinkList::of([1,2,3,4,5,6,7,8,9])
+/// list.bringtofront(4,findFromHead=false)
+/// // 4<=>1<=>2<=>3<=>5<=>6<=>7<=>8<=>9
+/// ```
+pub fn bringtofront[T: Eq](self: LinkList[T],value: T,~findFromHead: Bool=true)->Unit{
+  match self.head{
+    Some(head)=>{
+      if head.value==value{
+        return
+      }
+      let findNode = {
+        if findFromHead{
+          head.findNode(value)
+        }else{
+          self.tail.unwrap().rfindNode(value)
+        }
+      }
+      match findNode{
+        Some(node)=>{
+          let prvNode = node.prev
+          prvNode.unwrap().next = node.next
+          match node.next{
+            Some(nextNode)=>nextNode.prev = prvNode
+            None=>self.tail=prvNode
+          }
+          self.head.unwrap().prev = Some(node)
+          node.next = self.head
+          node.prev = None
+          self.head = Some(node)
+          return
+        }
+        _=>()
+      }    
+    }
+    _=>()
+  }
+  let _= self.unshift(value)
 }
 
 pub fn LinkList::default[T]()->LinkList[T]{
