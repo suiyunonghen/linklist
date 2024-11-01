@@ -88,16 +88,15 @@ pub fn Node::rfindNodeEx[T](self: Node[T],f: (T)->Bool)->Node[T]?{
 
 pub fn iter[T](self : Node[T]) -> Iter[T] {
   Iter::new(
-    fn(yield){ 
-      let _ = yield(self.value)
-      loop self.next{
-        Some(current)=>{
+    fn(yield){       
+      loop self.next,yield(self.value){
+        Some(current),_=>{
           match yield(current.value){
-            IterContinue=>continue current.next
+            IterContinue=>continue current.next,IterContinue
             IterEnd=>break IterEnd
           }          
         }
-        None=>{
+        None,_=>{
           break IterEnd
         }
       }
@@ -107,16 +106,15 @@ pub fn iter[T](self : Node[T]) -> Iter[T] {
 
 pub fn reverse_iter[T](self: Node[T])->Iter[T]{
   Iter::new(
-    fn(yield){
-      let _ = yield(self.value)
-      loop self.prev{
-        Some(current)=>{
+    fn(yield){      
+      loop self.prev,yield(self.value){
+        Some(current),_=>{
           match yield(current.value){
-            IterContinue=>continue current.prev
+            IterContinue=>continue current.prev,IterContinue
             IterEnd=>break IterEnd
           }          
         }
-        None=>break IterEnd
+        None,_=>break IterEnd
       }
     }
   )
