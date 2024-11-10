@@ -34,6 +34,12 @@ test "iter"{
   for str in m{
     println(str)    
   }
+  let v=32
+  match v{
+    1 | 3=>println("1,3")
+    32=>println("Gasdf")
+    _=>println("Gasdf")
+  }
 }
 
 test "Zip"{
