@@ -88,10 +88,10 @@ pub fn Node::rfindNodeEx[T](self: Node[T],f: (T)->Bool)->Node[T]?{
 
 pub fn iter[T](self : Node[T]) -> Iter[T] {
   Iter::new(
-    fn(yield){       
-      loop self.next,yield(self.value){
+    fn(yieldfn){       
+      loop self.next,yieldfn(self.value){
         Some(current),_=>{
-          match yield(current.value){
+          match yieldfn(current.value){
             IterContinue=>continue current.next,IterContinue
             IterEnd=>break IterEnd
           }          
@@ -106,10 +106,10 @@ pub fn iter[T](self : Node[T]) -> Iter[T] {
 
 pub fn reverse_iter[T](self: Node[T])->Iter[T]{
   Iter::new(
-    fn(yield){      
-      loop self.prev,yield(self.value){
+    fn(yieldfn){      
+      loop self.prev,yieldfn(self.value){
         Some(current),_=>{
-          match yield(current.value){
+          match yieldfn(current.value){
             IterContinue=>continue current.prev,IterContinue
             IterEnd=>break IterEnd
           }          
@@ -302,10 +302,10 @@ pub fn unshift[T](self: LinkList[T],value: T)->LinkList[T]{
 /// for ele in LinkList
 pub fn iter[T](self : LinkList[T]) -> Iter[T] {
   Iter::new(
-    fn(yield){
+    fn(yieldfn){
       loop self.head{
         Some(current)=>{
-          match yield(current.value){
+          match yieldfn(current.value){
             IterContinue=>continue current.next
             IterEnd=>break IterEnd
           }          
@@ -328,10 +328,10 @@ pub fn iter[T](self : LinkList[T]) -> Iter[T] {
 /// }
 pub fn reverse_iter[T](self: LinkList[T])->Iter[T]{
   Iter::new(
-    fn(yield){
+    fn(yieldfn){
       loop self.tail{
         Some(current)=>{
-          match yield(current.value){
+          match yieldfn(current.value){
             IterContinue=>continue current.prev
             IterEnd=>break IterEnd
           }          
@@ -638,7 +638,7 @@ pub fn findNode[T](self: LinkList[T],f: (T)->Bool)->Node[T]?{
 /// list.sendtoback(8,findFromEnd=true)
 /// // 1<=>2<=>3<=>4<=>5<=>6<=>7<=>9<=>8
 /// ```
-pub fn sendtoback[T: Eq](self: LinkList[T],value: T,~findFromEnd: Bool=true)->Unit{
+pub fn sendtoback[T: Eq](self: LinkList[T],value: T,findFromEnd~: Bool=true)->Unit{
   match self.tail{
     Some(tail)=>{
       if tail.value == value{
@@ -683,7 +683,7 @@ pub fn sendtoback[T: Eq](self: LinkList[T],value: T,~findFromEnd: Bool=true)->Un
 /// list.bringtofront(4,findFromHead=false)
 /// // 4<=>1<=>2<=>3<=>5<=>6<=>7<=>8<=>9
 /// ```
-pub fn bringtofront[T: Eq](self: LinkList[T],value: T,~findFromHead: Bool=true)->Unit{
+pub fn bringtofront[T: Eq](self: LinkList[T],value: T,findFromHead~: Bool=true)->Unit{
   match self.head{
     Some(head)=>{
       if head.value==value{
