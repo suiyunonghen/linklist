@@ -1,5 +1,8 @@
 test "push pop" {  
-  let list: @linklist.LinkList[Int] = @linklist.LinkList::new().push(123).push(456).push(789)  
+  let list: @linklist.LinkList[Int] = @linklist.LinkList::new()
+  ..push(123)
+  ..push(456)
+  ..push(789) 
   println(list)
   assert_eq!(list.pop(),Some(789))
   assert_eq!(list.pop(),Some(456))
@@ -10,7 +13,10 @@ test "push pop" {
 }
 
 test "shift unshift"{
-  let list: @linklist.LinkList[String] = @linklist.LinkList::new().unshift("test").unshift("dxsoft").unshift("data")
+  let list: @linklist.LinkList[String] = @linklist.LinkList::new()
+  ..unshift("test")
+  ..unshift("dxsoft")
+  ..unshift("data")
   for str in list{
     println(str)
   }  
@@ -25,7 +31,9 @@ test "shift unshift"{
 
 test "iter"{
   let list: @linklist.LinkList[String] = @linklist.LinkList::new()
-  let _=list.push("test").push("dxsoft").push("data")
+  ..push("test")
+  ..push("dxsoft")
+  ..push("data")
   for str in list{
     println(str)
   }
@@ -51,7 +59,9 @@ test "Zip"{
 
 test "remove"{
   let list: @linklist.LinkList[String] = @linklist.LinkList::new()
-  let _=list.push("test").push("dxsoft").push("data")
+  ..push("test")
+  ..push("dxsoft")
+  ..push("data")
   assert_eq!(list.remove("data"),true)
   assert_eq!(list.length,2)
   for str in list{
@@ -68,7 +78,11 @@ test "drop_while"{
 }
 
 test "map"{
-  let list: @linklist.LinkList[Int] = @linklist.LinkList::new().push(1).push(2).push(3).push(4)
+  let list: @linklist.LinkList[Int] = @linklist.LinkList::new()
+  ..push(1)
+  ..push(2)
+  ..push(3)
+  ..push(4)
   let lst = list.reverse_map(fn(v)->Int{v*2})
   for ele in lst{
     println(ele)
