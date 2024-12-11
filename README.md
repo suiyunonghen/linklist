@@ -1,7 +1,7 @@
 # moonbit的一个双向链表库
 
-## 使用 Usage
-```
+## Usage
+```MoonBit
 let list: @linklist.LinkList[Int] = @linklist.LinkList::new().push(123).push(456).push(789)  
 let last=list.peek()
 if last==789{

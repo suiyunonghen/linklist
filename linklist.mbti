@@ -1,0 +1,58 @@
+package suiyunonghen/linklist
+
+// Values
+
+// Types and methods
+pub(readonly) struct LinkList {
+  length : Int
+  // private fields
+}
+impl LinkList {
+  add[T](Self[T], T) -> Unit
+  bringtofront[T : Eq](Self[T], T, findFromHead~ : Bool = ..) -> Unit
+  clear[T](Self[T]) -> Unit
+  contains[T : Eq](Self[T], T) -> Bool
+  default[T]() -> Self[T]
+  drop_while[T](Self[T], (T) -> Bool) -> Self[T]
+  filter[T](Self[T], (T) -> Bool) -> Self[T]
+  find[T](Self[T], (T) -> Bool) -> T?
+  findNode[T](Self[T], (T) -> Bool) -> Node[T]?
+  from_array[T](Array[T]) -> Self[T]
+  from_iter[T](Iter[T]) -> Self[T]
+  iter[T](Self[T]) -> Iter[T]
+  lookup[A : Eq, B](Self[(A, B)], A) -> B?
+  map[A, B](Self[A], (A) -> B) -> Self[B]
+  new[T]() -> Self[T]
+  of[T](FixedArray[T]) -> Self[T]
+  op_get[T](Self[T], Int) -> T?
+  peek[T](Self[T]) -> T?
+  pop[T](Self[T]) -> T?
+  push[T](Self[T], T) -> Unit
+  remove[T : Eq](Self[T], T) -> Bool
+  reverse_iter[T](Self[T]) -> Iter[T]
+  reverse_map[A, B](Self[A], (A) -> B) -> Self[B]
+  sendtoback[T : Eq](Self[T], T, findFromEnd~ : Bool = ..) -> Unit
+  shift[T](Self[T]) -> T?
+  to_string[T : Show](Self[T]) -> String
+  unshift[T](Self[T], T) -> Unit
+  unzip[A, B](Self[(A, B)]) -> (Self[A], Self[B])
+  zip[A, B](Self[A], Self[B]) -> Self[(A, B)]?
+}
+impl[T : Show] Show for LinkList[T]
+
+type Node
+impl Node {
+  findNode[T : Eq](Self[T], T) -> Self[T]?
+  findNodeEx[T](Self[T], (T) -> Bool) -> Self[T]?
+  iter[T](Self[T]) -> Iter[T]
+  reverse_iter[T](Self[T]) -> Iter[T]
+  rfindNode[T : Eq](Self[T], T) -> Self[T]?
+  rfindNodeEx[T](Self[T], (T) -> Bool) -> Self[T]?
+  to_string[T : Show](Self[T]) -> String
+  value[T](Self[T]) -> T
+}
+
+// Type aliases
+
+// Traits
+
