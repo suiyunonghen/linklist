@@ -126,7 +126,7 @@ pub fn reverse_iter[T](self : Node[T]) -> Iter[T] {
 }
 
 ///|
-pub(readonly) struct LinkList[T] {
+pub struct LinkList[T] {
   priv mut head : Node[T]?
   priv mut tail : Node[T]?
   mut length : Int
@@ -180,7 +180,7 @@ pub fn add[T](self : LinkList[T], value : T) -> Unit {
 
 ///|
 pub impl[T : Show] Show for LinkList[T] with output(xs, logger) {
-  logger.write_iter(xs.iter(), prefix="", suffix="", sep="<=>")
+  logger.write_iter(xs.iter_1(), prefix="", suffix="", sep="<=>")
 }
 
 ///|
@@ -312,7 +312,7 @@ pub fn unshift[T](self : LinkList[T], value : T) -> Unit {
 }
 
 ///| for ele in LinkList
-pub fn iter[T](self : LinkList[T]) -> Iter[T] {
+pub fn iter_1[T](self : LinkList[T]) -> Iter[T] {
   Iter::new(
     fn(yieldfn) {
       loop self.head {
@@ -339,7 +339,7 @@ pub fn iter[T](self : LinkList[T]) -> Iter[T] {
 ///   println(str) 
 /// ```
 /// }
-pub fn reverse_iter[T](self : LinkList[T]) -> Iter[T] {
+pub fn reverse_iter_1[T](self : LinkList[T]) -> Iter[T] {
   Iter::new(
     fn(yieldfn) {
       loop self.tail {
