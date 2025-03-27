@@ -98,7 +98,7 @@ test "of" {
 }
 
 test "[]" {
-  let lst = @linklist.of(
+  let lst = @linklist.LinkList::of(
     [
       "春眠不觉晓", "处处闻啼鸟", "一生如牛不得闲", "得闲已与山共眠",
     ],
@@ -113,7 +113,7 @@ test "findNode" {
   let node5 = list.findNode(fn(value : Int) -> Bool { value == 5 })
   match node5 {
     Some(v) => {
-      println("查到了内容\{v},下面准备从这里开始往后迭代")
+      // println("查到了内容\{v},下面准备从这里开始往后迭代")
       for value in v {
         println(value)
       }
