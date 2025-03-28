@@ -20,12 +20,12 @@ struct Node[T] {
 }
 
 ///|
-pub fn value[T](self : Node[T]) -> T {
+pub fn Node::value[T](self : Node[T]) -> T {
   self.value
 }
 
 ///|
-pub fn to_string[T : Show](self : Node[T]) -> String {
+pub fn Node::to_string[T : Show](self : Node[T]) -> String {
   self.value.to_string()
 }
 
@@ -94,7 +94,7 @@ pub fn Node::rfindNodeEx[T](self : Node[T], f : (T) -> Bool) -> Node[T]? {
 }
 
 ///|
-pub fn iter[T](self : Node[T]) -> Iter[T] {
+pub fn Node::iter[T](self : Node[T]) -> Iter[T] {
   Iter::new(
     fn(yieldfn) {
       loop self.next, yieldfn(self.value) {
@@ -110,7 +110,7 @@ pub fn iter[T](self : Node[T]) -> Iter[T] {
 }
 
 ///|
-pub fn reverse_iter[T](self : Node[T]) -> Iter[T] {
+pub fn Node::reverse_iter[T](self : Node[T]) -> Iter[T] {
   Iter::new(
     fn(yieldfn) {
       loop self.prev, yieldfn(self.value) {
@@ -126,7 +126,7 @@ pub fn reverse_iter[T](self : Node[T]) -> Iter[T] {
 }
 
 ///|
-pub(readonly) struct LinkList[T] {
+pub struct LinkList[T] {
   priv mut head : Node[T]?
   priv mut tail : Node[T]?
   mut length : Int
@@ -138,7 +138,7 @@ pub fn LinkList::new[T]() -> LinkList[T] {
 }
 
 ///|
-pub fn op_get[T](self : LinkList[T], index : Int) -> T? {
+pub fn LinkList::op_get[T](self : LinkList[T], index : Int) -> T? {
   loop self.head, 0 {
     Some(current), idx => {
       if idx == index {
@@ -163,7 +163,7 @@ pub fn op_get[T](self : LinkList[T], index : Int) -> T? {
 ///   println(str)
 /// } 
 /// ```
-pub fn push[T](self : LinkList[T], value : T) -> Unit {
+pub fn LinkList::push[T](self : LinkList[T], value : T) -> Unit {
   let newNode : Node[T] = { prev: self.tail, next: None, value }
   match self.head {
     None => self.head = Some(newNode)
@@ -174,7 +174,7 @@ pub fn push[T](self : LinkList[T], value : T) -> Unit {
 }
 
 ///|
-pub fn add[T](self : LinkList[T], value : T) -> Unit {
+pub fn LinkList::add[T](self : LinkList[T], value : T) -> Unit {
   self.push(value)
 }
 
@@ -220,7 +220,7 @@ pub fn LinkList::from_array[T](arr : Array[T]) -> LinkList[T] {
 /// assert_eq!(list.pop(),None)
 /// assert_eq!(list.length,0)
 /// ```
-pub fn pop[T](self : LinkList[T]) -> T? {
+pub fn LinkList::pop[T](self : LinkList[T]) -> T? {
   match self.head {
     None => None
     _ => {
@@ -250,7 +250,7 @@ pub fn pop[T](self : LinkList[T]) -> T? {
 /// assert_eq!(list.peek(),Some(789))
 /// assert_eq!(list.length,3)
 /// ```
-pub fn peek[T](self : LinkList[T]) -> T? {
+pub fn LinkList::peek[T](self : LinkList[T]) -> T? {
   match self.head {
     None => None
     _ => Some(self.tail.unwrap().value)
@@ -272,7 +272,7 @@ pub fn peek[T](self : LinkList[T]) -> T? {
 /// assert_eq!(list.shift(),None)
 /// assert_eq!(list.length,0)
 /// ```
-pub fn shift[T](self : LinkList[T]) -> T? {
+pub fn LinkList::shift[T](self : LinkList[T]) -> T? {
   match self.head {
     None => None
     Some(current) => {
@@ -301,7 +301,7 @@ pub fn shift[T](self : LinkList[T]) -> T? {
 ///   println(str)
 /// } 
 /// ```
-pub fn unshift[T](self : LinkList[T], value : T) -> Unit {
+pub fn LinkList::unshift[T](self : LinkList[T], value : T) -> Unit {
   let newNode : Node[T] = { prev: None, next: self.head, value }
   match self.head {
     None => self.tail = Some(newNode)
@@ -312,7 +312,7 @@ pub fn unshift[T](self : LinkList[T], value : T) -> Unit {
 }
 
 ///| for ele in LinkList
-pub fn iter[T](self : LinkList[T]) -> Iter[T] {
+pub fn LinkList::iter[T](self : LinkList[T]) -> Iter[T] {
   Iter::new(
     fn(yieldfn) {
       loop self.head {
@@ -339,7 +339,7 @@ pub fn iter[T](self : LinkList[T]) -> Iter[T] {
 ///   println(str) 
 /// ```
 /// }
-pub fn reverse_iter[T](self : LinkList[T]) -> Iter[T] {
+pub fn LinkList::reverse_iter[T](self : LinkList[T]) -> Iter[T] {
   Iter::new(
     fn(yieldfn) {
       loop self.tail {
@@ -355,7 +355,7 @@ pub fn reverse_iter[T](self : LinkList[T]) -> Iter[T] {
 }
 
 ///|
-pub fn clear[T](self : LinkList[T]) -> Unit {
+pub fn LinkList::clear[T](self : LinkList[T]) -> Unit {
   // loop self.head{
   //   Some(current)=>{
   //     current.prev = None
@@ -383,7 +383,7 @@ pub fn clear[T](self : LinkList[T]) -> Unit {
 /// let lst = list.map(fn(v)->Int{v*2})
 /// // lst=[2,4,6,8]
 /// ```
-pub fn map[A, B](self : LinkList[A], f : (A) -> B) -> LinkList[B] {
+pub fn LinkList::map[A, B](self : LinkList[A], f : (A) -> B) -> LinkList[B] {
   let result : LinkList[B] = LinkList::new()
   loop self.head {
     Some(current) => {
@@ -408,7 +408,7 @@ pub fn map[A, B](self : LinkList[A], f : (A) -> B) -> LinkList[B] {
 /// let lst = list.reverse_map(fn(v)->Int{v*2})
 /// // lst=8<=>6<=>4<=>2
 /// ```
-pub fn reverse_map[A, B](self : LinkList[A], f : (A) -> B) -> LinkList[B] {
+pub fn LinkList::reverse_map[A, B](self : LinkList[A], f : (A) -> B) -> LinkList[B] {
   let result : LinkList[B] = LinkList::new()
   loop self.tail {
     Some(current) => {
@@ -428,7 +428,7 @@ pub fn reverse_map[A, B](self : LinkList[A], f : (A) -> B) -> LinkList[B] {
 /// println(of([1, 2, 3, 4, 5]).filter(fn(x){ x % 2 == 0}))
 /// // output: from_array([2, 4])
 /// ```
-pub fn filter[T](self : LinkList[T], f : (T) -> Bool) -> LinkList[T] {
+pub fn LinkList::filter[T](self : LinkList[T], f : (T) -> Bool) -> LinkList[T] {
   let result : LinkList[T] = LinkList::new()
   loop self.head {
     Some(current) => {
@@ -451,7 +451,7 @@ pub fn filter[T](self : LinkList[T], f : (T) -> Bool) -> LinkList[T] {
 /// let r = zip(of[1, 2, 3, 4, 5]), of([6, 7, 8, 9, 10]))
 /// println(r) // output: Some((1, 6)<=>(2, 7)<=>(3, 8)<=>(4, 9)<=>(5, 10))
 /// ```
-pub fn zip[A, B](self : LinkList[A], other : LinkList[B]) -> LinkList[(A, B)]? {
+pub fn LinkList::zip[A, B](self : LinkList[A], other : LinkList[B]) -> LinkList[(A, B)]? {
   if self.length != other.length {
     None
   } else {
@@ -476,7 +476,7 @@ pub fn zip[A, B](self : LinkList[A], other : LinkList[B]) -> LinkList[(A, B)]? {
 /// println(a) // output: from_array([1, 3, 5])
 /// println(b) // output: from_array([2, 4, 6])
 /// ```
-pub fn unzip[A, B](self : LinkList[(A, B)]) -> (LinkList[A], LinkList[B]) {
+pub fn LinkList::unzip[A, B](self : LinkList[(A, B)]) -> (LinkList[A], LinkList[B]) {
   let (resulta, resultb) = (LinkList::new(), LinkList::new())
   loop self.head {
     Some(node) => {
@@ -490,7 +490,7 @@ pub fn unzip[A, B](self : LinkList[(A, B)]) -> (LinkList[A], LinkList[B]) {
 }
 
 ///| Check if the linkList contains the value.
-pub fn contains[T : Eq](self : LinkList[T], value : T) -> Bool {
+pub fn LinkList::contains[T : Eq](self : LinkList[T], value : T) -> Bool {
   loop self.head {
     Some(current) => {
       if current.value == value {
@@ -503,7 +503,7 @@ pub fn contains[T : Eq](self : LinkList[T], value : T) -> Bool {
 }
 
 ///| remove value from linkList
-pub fn remove[T : Eq](self : LinkList[T], value : T) -> Bool {
+pub fn LinkList::remove[T : Eq](self : LinkList[T], value : T) -> Bool {
   loop self.head {
     Some(current) => {
       if current.value == value {
@@ -544,7 +544,7 @@ pub fn remove[T : Eq](self : LinkList[T], value : T) -> Bool {
 /// ```
 /// from_array([1, 2, 3, 4]).drop_while(fn(x) { x < 3 })
 /// ```
-pub fn drop_while[T](self : LinkList[T], f : (T) -> Bool) -> LinkList[T] {
+pub fn LinkList::drop_while[T](self : LinkList[T], f : (T) -> Bool) -> LinkList[T] {
   loop self.head {
     Some(current) => {
       let next = current.next
@@ -585,7 +585,7 @@ pub fn drop_while[T](self : LinkList[T], f : (T) -> Bool) -> LinkList[T] {
 /// let ls = from_array([(1, "a"), (2, "b"), (3, "c")])
 /// ls.lookup(3) // output: Some("c")
 /// ```
-pub fn lookup[A : Eq, B](self : LinkList[(A, B)], value : A) -> B? {
+pub fn LinkList::lookup[A : Eq, B](self : LinkList[(A, B)], value : A) -> B? {
   loop self.head {
     Some(current) => {
       if current.value.0 == value {
@@ -605,7 +605,7 @@ pub fn lookup[A : Eq, B](self : LinkList[(A, B)], value : A) -> B? {
 /// println(of([1, 3, 5, 8]).find(fn(element) -> Bool { element % 2 == 0}))
 /// // output: Some(8)
 /// ```
-pub fn find[T](self : LinkList[T], f : (T) -> Bool) -> T? {
+pub fn LinkList::find[T](self : LinkList[T], f : (T) -> Bool) -> T? {
   loop self.head {
     Some(current) => {
       if f(current.value) {
@@ -640,7 +640,7 @@ pub fn find[T](self : LinkList[T], f : (T) -> Bool) -> T? {
 ///  }
 /// // output: Some(8)
 /// ```
-pub fn findNode[T](self : LinkList[T], f : (T) -> Bool) -> Node[T]? {
+pub fn LinkList::findNode[T](self : LinkList[T], f : (T) -> Bool) -> Node[T]? {
   match self.head {
     Some(head) => head.findNodeEx(f)
     _ => None
@@ -656,7 +656,7 @@ pub fn findNode[T](self : LinkList[T], f : (T) -> Bool) -> Node[T]? {
 /// list.sendtoback(8,findFromEnd=true)
 /// // 1<=>2<=>3<=>4<=>5<=>6<=>7<=>9<=>8
 /// ```
-pub fn sendtoback[T : Eq](
+pub fn LinkList::sendtoback[T : Eq](
   self : LinkList[T],
   value : T,
   findFromEnd~ : Bool = true
@@ -702,7 +702,7 @@ pub fn sendtoback[T : Eq](
 /// list.bringtofront(4,findFromHead=false)
 /// // 4<=>1<=>2<=>3<=>5<=>6<=>7<=>8<=>9
 /// ```
-pub fn bringtofront[T : Eq](
+pub fn LinkList::bringtofront[T : Eq](
   self : LinkList[T],
   value : T,
   findFromHead~ : Bool = true
